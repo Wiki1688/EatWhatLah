@@ -28,6 +28,7 @@ export function Chip({
 }: ChipProps) {
   return (
     <button
+      key={id}
       id={id}
       type="button"
       onClick={onClick}

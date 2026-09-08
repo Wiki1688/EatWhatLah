@@ -7,12 +7,53 @@
  * Seamless 150ms cross-fade transition without page reload.
  */
 
-import React, { useState, useTransition } from 'react';
+import React, { useState, useEffect, useTransition } from 'react';
 import { ScreenWhereWhat } from './components/ScreenWhereWhat';
 import { ScreenTopPicks } from './components/ScreenTopPicks';
 import { FilterState, recommendStall } from './lib/recommend';
 import { STALLS, VENUES } from './data/venues';
 import { THEME_COLORS } from './theme';
+
+const PREFS_STORAGE_KEY = 'eatwhatlah.prefs';
+
+interface StoredPrefs {
+  venueId?: string;
+  venue?: string;
+  mode?: string;
+}
+
+// Safely load stored diner preferences (venue and familiarity mode)
+function loadStoredPrefs(): { venueId: string; mode: 'new' | 'know' } {
+  const fallback = {
+    venueId: VENUES[0].id,
+    mode: 'new' as const,
+  };
+
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) {
+      return fallback;
+    }
+    const raw = localStorage.getItem(PREFS_STORAGE_KEY);
+    if (!raw) return fallback;
+    const parsed: StoredPrefs = JSON.parse(raw);
+
+    const candidateVenueId = parsed.venueId || parsed.venue;
+    const venueId =
+      typeof candidateVenueId === 'string' &&
+      VENUES.some((v) => v.id === candidateVenueId)
+        ? candidateVenueId
+        : fallback.venueId;
+
+    const mode: 'new' | 'know' =
+      parsed.mode === 'know' || parsed.mode === 'I know this place'
+        ? 'know'
+        : 'new';
+
+    return { venueId, mode };
+  } catch {
+    return fallback;
+  }
+}
 
 export default function App() {
   // Navigation Screen State
@@ -20,20 +61,67 @@ export default function App() {
   const [isFading, setIsFading] = useState(false);
   const [, startTransition] = useTransition();
 
-  // Filters State with prescribed defaults: Craving unselected, everything else "Any"
-  const [filters, setFilters] = useState<FilterState>({
-    venueId: VENUES[0].id,
-    craving: null,
-    budget: 'Any',
-    dietary: 'Any',
-    wait: 'Any',
+  // Filters State: venue restored from prefs; craving, budget, diet, wait reset every visit
+  const [filters, setFilters] = useState<FilterState>(() => {
+    const prefs = loadStoredPrefs();
+    return {
+      venueId: prefs.venueId,
+      craving: null,
+      budget: 'Any',
+      dietary: 'Any',
+      wait: 'Any',
+    };
   });
 
-  // Mode: "I'm new here" by default
-  const [mode, setMode] = useState<'new' | 'know'>('new');
+  // Mode: familiarity mode restored from prefs ("I'm new here" / "I know this place")
+  const [mode, setMode] = useState<'new' | 'know'>(() => {
+    const prefs = loadStoredPrefs();
+    return prefs.mode;
+  });
 
-  // Compute recommendation
-  const recommendation = recommendStall(STALLS, filters, new Date());
+  // Persist venue and familiarity mode to localStorage under key "eatwhatlah.prefs"
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem(
+          PREFS_STORAGE_KEY,
+          JSON.stringify({
+            venueId: filters.venueId,
+            venue: filters.venueId,
+            mode,
+          })
+        );
+      }
+    } catch {
+      // Safely ignore if storage is blocked or full
+    }
+  }, [filters.venueId, mode]);
+
+  // Session overrides map for stalls (e.g. demo sold-out toggles)
+  const [overrides, setOverrides] = useState<Record<string, boolean>>({});
+  const [demoSoldOutStallId, setDemoSoldOutStallId] = useState<string | null>(null);
+
+  // Compute recommendation passing session overrides map into recommendStall
+  const recommendation = recommendStall(STALLS, filters, new Date(), overrides);
+
+  // Tapping demo button sets that stall's isSoldOut to true; tapping again reverses it
+  const handleToggleSoldOut = (currentPick1Id: string) => {
+    if (demoSoldOutStallId) {
+      const prevId = demoSoldOutStallId;
+      setDemoSoldOutStallId(null);
+      setOverrides((prev) => {
+        const next = { ...prev };
+        delete next[prevId];
+        return next;
+      });
+    } else {
+      setDemoSoldOutStallId(currentPick1Id);
+      setOverrides((prev) => ({
+        ...prev,
+        [currentPick1Id]: true,
+      }));
+    }
+  };
 
   // Transition handler between screens with 150ms cross-fade
   const navigateTo = (targetScreen: 'where-what' | 'top-picks') => {
@@ -87,6 +175,7 @@ export default function App() {
             recommendation={recommendation}
             mode={mode}
             onChangeMind={handleChangeMind}
+            onToggleSoldOut={handleToggleSoldOut}
           />
         )}
       </div>

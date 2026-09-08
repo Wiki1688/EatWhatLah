@@ -38,6 +38,7 @@ export function Tile({
 
   return (
     <button
+      key={id}
       id={id}
       type="button"
       onClick={onClick}

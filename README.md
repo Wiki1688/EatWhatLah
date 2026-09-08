@@ -1,5 +1,22 @@
 # EatWhatLah? 🍜
 
+## Who this is for
+
+A hungry, indecisive diner standing at the entrance of a hawker centre opens this screen to decide what to eat in two taps, and knows it worked when a stall unit number is on screen big enough to read while walking.
+
+- **User**: External (kind A)
+- **Team Members**: [FILL NAMES]
+
+## How to verify
+
+Run the acceptance check suite:
+
+```bash
+npm run check
+```
+
+---
+
 Front-end web application for a hungry, indecisive diner standing at the entrance of a hawker centre, food court, or café street.
 
 Built for **MGMT 6110 Human-AI Collaboration at SMU**.

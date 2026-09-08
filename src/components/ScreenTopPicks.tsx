@@ -20,6 +20,7 @@ interface ScreenTopPicksProps {
   recommendation: RecommendationResult;
   mode: 'new' | 'know';
   onChangeMind: () => void;
+  onToggleSoldOut?: (stallId: string) => void;
 }
 
 export function ScreenTopPicks({
@@ -27,6 +28,7 @@ export function ScreenTopPicks({
   recommendation,
   mode,
   onChangeMind,
+  onToggleSoldOut,
 }: ScreenTopPicksProps) {
   const [fadedIn, setFadedIn] = useState(false);
 
@@ -70,7 +72,7 @@ export function ScreenTopPicks({
           }}
           className="font-bold text-sm hover:underline flex items-center gap-1 cursor-pointer select-none"
         >
-          ← {COPY.backToFilters}
+          {COPY.changeMindButton}
         </button>
 
         <span
@@ -152,16 +154,36 @@ export function ScreenTopPicks({
       <section id="section-ranked-picks" className="space-y-6">
         {picks.map((stall, index) => {
           const rankNumber = (index + 1) as 1 | 2 | 3;
+          const isPick1 = rankNumber === 1;
           return (
-            <StallCard
-              key={stall.id}
-              id={`pick-card-${rankNumber}-${stall.id}`}
-              stall={stall}
-              rank={rankNumber}
-              mode={mode}
-              onChangeMind={onChangeMind}
-              variant="pick"
-            />
+            <div key={stall.id} className="space-y-3">
+              <StallCard
+                id={`pick-card-${rankNumber}-${stall.id}`}
+                stall={stall}
+                rank={rankNumber}
+                mode={mode}
+                onChangeMind={onChangeMind}
+                variant="pick"
+              />
+              {isPick1 && onToggleSoldOut && (
+                <div className="flex justify-start">
+                  <button
+                    id="demo-mark-sold-out-button"
+                    type="button"
+                    onClick={() => onToggleSoldOut(stall.id)}
+                    style={{
+                      borderColor: THEME_COLORS.brand,
+                      color: THEME_COLORS.brand,
+                      backgroundColor: 'transparent',
+                      borderRadius: 8,
+                    }}
+                    className="text-xs font-semibold px-3 py-1.5 border border-solid transition-colors hover:bg-orange-50 active:scale-95 cursor-pointer"
+                  >
+                    Demo: mark this stall sold out
+                  </button>
+                </div>
+              )}
+            </div>
           );
         })}
       </section>

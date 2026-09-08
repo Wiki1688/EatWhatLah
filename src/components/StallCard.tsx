@@ -87,6 +87,7 @@ export function StallCard({
   if (variant === 'alternative') {
     return (
       <div
+        key={id}
         id={id}
         style={{
           backgroundColor: isSoldOut ? THEME_COLORS.border : THEME_COLORS.cardSurface,
@@ -201,6 +202,7 @@ export function StallCard({
 
   return (
     <article
+      key={id}
       id={id}
       style={{
         backgroundColor: isSoldOut ? THEME_COLORS.border : THEME_COLORS.cardSurface,

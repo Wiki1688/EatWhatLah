@@ -75,6 +75,7 @@ export const COPY = {
   },
 
   // Screen 2: Top Picks
+  topPicksTitle: 'Your Top Picks',
   picksScreenTitle: 'Your Top Picks',
   picksScreenSubtitle: 'Hand-picked recommendations based on your preferences',
   changeMindButton: '← Change my mind',
@@ -91,6 +92,8 @@ export const COPY = {
   waitMinutesSuffix: 'min wait',
 
   // Alternatives section
+  alternativesTitle: 'Also worth a look',
+  alternativesSubtitle: 'Same craving and diet, ranked next',
   alternativesHeading: 'More stalls that match your craving & diet',
   noAlternativesMessage: 'No other stalls match this craving and dietary rule today.',
 

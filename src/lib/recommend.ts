@@ -99,19 +99,34 @@ export function matchesCraving(stall: Stall, craving: CravingFilter | null): boo
   return stall.craving === craving;
 }
 
+export type StallOverrides = Record<string, boolean | { isSoldOut?: boolean }>;
+
 /**
  * Pure recommendation engine
  */
 export function recommendStall(
   stalls: Stall[],
   filters: FilterState,
-  date: Date = new Date()
+  date: Date = new Date(),
+  overrides?: StallOverrides
 ): RecommendationResult {
   const venue = VENUES.find((v) => v.id === filters.venueId);
   const venueName = venue ? venue.shortName : 'this venue';
 
+  // Apply session overrides (e.g. demo sold-out toggles) without mutating original data
+  const effectiveStalls = overrides
+    ? stalls.map((s) => {
+        const override = overrides[s.id];
+        if (override === undefined) return s;
+        if (typeof override === 'boolean') {
+          return { ...s, isSoldOut: override };
+        }
+        return { ...s, ...override };
+      })
+    : stalls;
+
   // 1. Filter by venue
-  const venueStalls = stalls.filter((s) => s.venueId === filters.venueId);
+  const venueStalls = effectiveStalls.filter((s) => s.venueId === filters.venueId);
 
   // 2. Craving & Dietary (CRITICAL: These two are NEVER relaxed)
   const cravingDietaryStalls = venueStalls.filter(

@@ -2,5 +2,5 @@
   "name": "EatWhatLah?",
   "description": "Fast food recommendations for indecisive diners at hawker centres, food courts, and café streets.",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
