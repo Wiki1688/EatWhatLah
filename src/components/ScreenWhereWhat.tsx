@@ -23,7 +23,7 @@ import { THEME_COLORS, THEME_SHADOWS } from '../theme';
 import { COPY } from '../copy';
 import { Chip } from './Chip';
 import { Tile } from './Tile';
-import { renderFilterIcon, EmptyPlateQuestionIcon } from '../icons';
+import { renderFilterIcon, EmptyPlateQuestionIcon, AppLogo } from '../icons';
 
 interface ScreenWhereWhatProps {
   filters: FilterState;
@@ -130,14 +130,18 @@ export function ScreenWhereWhat({
             fontSize: 32,
             lineHeight: 1.2,
           }}
-          className="font-extrabold tracking-tight"
+          className="font-extrabold tracking-tight flex items-center gap-3.5"
         >
-          {COPY.appTitle}
+          <AppLogo size={52} className="shrink-0 transition-transform duration-200 hover:scale-105 select-none" />
+          <span className="flex items-baseline">
+            <span>EatWhat</span>
+            <span style={{ color: THEME_COLORS.brand }}>Lah?</span>
+          </span>
         </h1>
         <p
           id="app-tagline"
           style={{ color: THEME_COLORS.secondaryText }}
-          className="text-base mt-1"
+          className="text-base mt-1.5"
         >
           {COPY.appTagline}
         </p>

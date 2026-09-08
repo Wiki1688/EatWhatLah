@@ -1207,3 +1207,185 @@ export function renderFilterIcon(category: 'craving' | 'budget' | 'dietary' | 'w
       }
   }
 }
+
+/**
+ * App Logo: A vibrant, appetizing hawker noodle bowl icon with chopsticks,
+ * steam swirls, and sparkling highlights on a warm brand gradient squircle.
+ */
+export function AppLogo({ size = 52, className }: IconProps) {
+  const filterId = useId();
+  const gradId = useId();
+  const glossId = useId();
+  const steamId = useId();
+  const noodleId = useId();
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 56 56"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      <defs>
+        {/* Soft warm ambient shadow */}
+        <filter id={filterId} x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow
+            dx="0"
+            dy="3"
+            stdDeviation="3"
+            floodColor="#E8692B"
+            floodOpacity="0.32"
+          />
+        </filter>
+
+        {/* Brand Vermilion / Terracotta Gradient */}
+        <linearGradient id={gradId} x1="6" y1="6" x2="50" y2="52" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#FF7E36" />
+          <stop offset="55%" stopColor="#E8692B" />
+          <stop offset="100%" stopColor="#C24E18" />
+        </linearGradient>
+
+        {/* Specular Radial Glow */}
+        <radialGradient id={glossId} cx="35%" cy="25%" r="65%">
+          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.35" />
+          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+        </radialGradient>
+
+        {/* Steam Gradient */}
+        <linearGradient id={steamId} x1="0" y1="20" x2="0" y2="6" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.85" />
+          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.05" />
+        </linearGradient>
+
+        {/* Noodle Strand Gradient */}
+        <linearGradient id={noodleId} x1="20" y1="16" x2="36" y2="34" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#FFE58F" />
+          <stop offset="60%" stopColor="#F2B134" />
+          <stop offset="100%" stopColor="#D48806" />
+        </linearGradient>
+      </defs>
+
+      {/* Main Squircle Container with drop shadow */}
+      <g filter={`url(#${filterId})`}>
+        <rect x="3" y="3" width="50" height="50" rx="15" fill={`url(#${gradId})`} />
+        {/* Specular Gloss Overlay */}
+        <rect x="3" y="3" width="50" height="50" rx="15" fill={`url(#${glossId})`} />
+        {/* Polished Inner Rim */}
+        <rect
+          x="3.75"
+          y="3.75"
+          width="48.5"
+          height="48.5"
+          rx="14.25"
+          stroke="rgba(255,255,255,0.3)"
+          strokeWidth="1.5"
+        />
+      </g>
+
+      {/* Steam rising */}
+      <path
+        d="M21 21C20 18 22 15 21 12C20.5 10.5 21 9 22 8"
+        stroke={`url(#${steamId})`}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M28 20C27 16 29.5 13 28 10C27 8 28 6.5 29 6"
+        stroke={`url(#${steamId})`}
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M34 22C33 19 35 16 34.5 13C34 11.5 34.5 10 35.5 9"
+        stroke={`url(#${steamId})`}
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+
+      {/* Chopsticks lifting noodles */}
+      {/* Back chopstick */}
+      <path
+        d="M17 19.5L46 12"
+        stroke="#4A2511"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
+      {/* Lifted noodle loops over chopsticks */}
+      <path
+        d="M22 30C21.5 24 23 19.5 26 19.5C28.5 19.5 29 23 29.5 30"
+        stroke={`url(#${noodleId})`}
+        strokeWidth="2.8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M25 31C24.5 25 26 18.5 29 18.5C31.5 18.5 32 23 32.5 31"
+        stroke={`url(#${noodleId})`}
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+      {/* Front chopstick */}
+      <path
+        d="M16 21L45 14"
+        stroke="#6E3719"
+        strokeWidth="2.6"
+        strokeLinecap="round"
+      />
+      {/* Chopstick Gold Band Accent */}
+      <path
+        d="M40.5 15.2L42.5 14.7"
+        stroke="#FFD54F"
+        strokeWidth="2.8"
+        strokeLinecap="round"
+      />
+
+      {/* Ceramic Hawker Bowl Body */}
+      {/* Bowl drop shadow */}
+      <ellipse cx="28" cy="42" rx="14" ry="2.5" fill="#000000" fillOpacity="0.18" />
+
+      {/* Bowl Outer Shell */}
+      <path
+        d="M12 29C12 38.5 19 43 28 43C37 43 44 38.5 44 29H12Z"
+        fill="#FFFFFF"
+      />
+      {/* Bowl 3D side shade */}
+      <path
+        d="M44 29C44 34.5 39.5 40 31 42.4C38.5 40.5 42.5 35.5 44 29Z"
+        fill="#E8E2D9"
+      />
+      {/* Bowl Rim */}
+      <ellipse cx="28" cy="29" rx="16" ry="4" fill="#FFFFFF" />
+      {/* Broth / Soup surface */}
+      <ellipse cx="28" cy="29.5" rx="14.5" ry="3.2" fill="#E65100" />
+      {/* Broth simmer highlight */}
+      <ellipse cx="26" cy="29.2" rx="10" ry="1.8" fill="#FF7043" />
+
+      {/* Noodles in broth */}
+      <path
+        d="M18 29.5C21 31 24 28.5 27 30C30 31.5 34 29 38 30"
+        stroke={`url(#${noodleId})`}
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
+
+      {/* Sparkling 4-point magic twinkle at top-right */}
+      <g transform="translate(44, 9)">
+        <path
+          d="M0 -5C0 -2 2 0 5 0C2 0 0 2 0 5C0 2 -2 0 -5 0C-2 0 0 -2 0 -5Z"
+          fill="#FFE082"
+        />
+        <circle cx="0" cy="0" r="1.5" fill="#FFFFFF" />
+      </g>
+      {/* Smaller twinkle at top-left */}
+      <g transform="translate(10, 15) scale(0.65)">
+        <path
+          d="M0 -4C0 -1.5 1.5 0 4 0C1.5 0 0 1.5 0 4C0 1.5 -1.5 0 -4 0C-1.5 0 0 -1.5 0 -4Z"
+          fill="#FFF3C4"
+        />
+        <circle cx="0" cy="0" r="1" fill="#FFFFFF" />
+      </g>
+    </svg>
+  );
+}
